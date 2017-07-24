@@ -1,0 +1,15 @@
+{
+  "name": "pacridon",
+  "version": "0.0.1",
+  "description": "パクツイ禁止",
+  "main": "src/index.js",
+  "author": "Niwazou1",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.3",
+    "mysql-promise": "^4.1.0",
+    "pug": "^2.0.0-rc.2"
+  }
+}
