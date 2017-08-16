@@ -9,7 +9,7 @@ class User extends Record{
     }
 
     static columns(){
-        return ["nickname"];
+        return ["nickname", "email", "password", "salt"];
     }
 
     toots(){
