@@ -1,8 +1,35 @@
+const Toot = require('../models/toot');
+const User = require('../models/user');
+const UserSession = require('../models/user_session');
+
 module.exports = function(app){
   app.get('/', function(req, res){
-    console.log(req.cookies.session_id);
-    console.log(req.signedCookies.session_id);
-    res.send("Initialized:" + req.signedCookies.session_id);
+    if(!req.signedCookies.session_id){
+      res.redirect('/login');
+      return;
+    }
+    UserSession.find(req.signedCookies.session_id).then((session) =>{
+      return User.find(session.data.user_id);
+    }).then((user) =>{
+      return user.toots();
+    }).then((toots) =>{
+      res.render("timeline", { toots: toots});
+    }).catch((err) =>{
+      console.log(err);
+      res.render('timeline', { error: true});
+    })
+  });
+
+  app.post('/new_toot', function(req, res){
+    UserSession.find(req.signedCookies.session_id).then((session) =>{
+      return User.find(session.data.user_id);
+    }).then((user) =>{
+      return Toot.create(user, req.body.toot);
+    }).then(() =>{
+      res.redirect('/');
+    }).catch((err) =>{
+      res.redirect('/');
+    });
   })
     require('./users')(app);
-  };
+};

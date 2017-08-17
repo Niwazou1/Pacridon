@@ -1,0 +1,17 @@
+extends layout.pug
+
+block head
+    meta(charset="UTF-8")
+    title Pacridon
+block content
+  .row
+    .col-md-6.col-md-offset-3
+        form(action="/new_toot" method="post")
+            .form-group
+                textarea.form-control(name="toot" placeholder="今何してる？" required)
+            .form-group
+                input.btn-primary.btn-block(type="submit" value="toot!" )
+        .penel-group
+            each toot in toots.reverse()
+                .panel.panel-default
+                    .panel-body= toot.data.body
