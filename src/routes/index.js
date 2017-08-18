@@ -9,7 +9,7 @@ module.exports = function(app){
       return;
     }
     
-    res.currentUser.toots().then((toots) =>{
+    res.locals.currentUser.toots().then((toots) =>{
       res.render('timeline', { toots: toots });
     }).catch((err) =>{
       console.log(err);
@@ -22,7 +22,7 @@ module.exports = function(app){
       res.redirect("login");
       return;
     }
-    
+
     Toot.create(res.locals.currentUser, req.body.toot).then(() =>{
       res.redirect('/');
     }).catch((err) =>{
@@ -30,4 +30,5 @@ module.exports = function(app){
     });
   })
     require('./users')(app);
+    require('./api')(app);
 };

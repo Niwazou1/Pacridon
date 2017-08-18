@@ -5,7 +5,7 @@ module.exports = function(app){
     app.use(function(req, res, next){
         let sessionId = req.signedCookies.session_id;
 
-        if(sessionId === null || sessionID === undefined){
+        if(sessionId === null || sessionId === undefined){
             return next();
         }
 

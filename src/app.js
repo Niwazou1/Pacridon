@@ -1,6 +1,9 @@
 const express = require('express');
 let app = express();
 
+const expressWs = require('express-ws');
+expressWs(app);
+
 // Middleware Settings
 const methodOverride = require('method-override');
 app.use(methodOverride('_method'));
