@@ -1,5 +1,4 @@
 module.exports = function(app){
-    let router = app.route('/api');
-
+    require('./toots')(app);
     require('./timeline')(app);
 }

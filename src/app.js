@@ -12,6 +12,8 @@ const path = require('path');
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
+app.use(express.static(path.resolve(__dirname, "../public")));
+
 const cookieParser = require('cookie-parser');
 app.use(cookieParser("太朗"));
 
