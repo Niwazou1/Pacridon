@@ -11,7 +11,23 @@ block content
                 textarea.form-control(name="toot" placeholder="今何してる？" required)
             .form-group
                 input.btn-primary.btn-block(type="submit" value="toot!" )
-        .penel-group
+        #toots.penel-group
             each toot in toots.reverse()
                 .panel.panel-default
                     .panel-body= toot.data.body
+
+    script.
+        window.addEventListener('DOMContentLoaded', function(){
+            let toots = document.getElementById('toots');
+            let ws = new WebSocket('ws://localhost:3000/api/timeline');
+            ws.addEventListener('message', function(event){
+                var toot = JSON.parse(event.data);
+                var panel = document.createElement('div');
+                panel.className = 'panel panel-default';
+                var panelBody = document.createElement('div');
+                panelBody.className = "panel-body";
+                panelBody.innerText = toot.body;
+                panel.appendChild(panelBody);
+                toots.insertBefore(panel, toots.firstChild);
+            })
+        })
