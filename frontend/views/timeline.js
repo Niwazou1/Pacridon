@@ -28,6 +28,25 @@ domready(function(){
                 }).catch((error) =>{
                     console.error(error);
                 })
+            },
+            deleteToot: function(event, id){
+                for(let i = 0; i < this.toots.length; i++){
+                    if(this.toots[i].id === id){
+                        this.toots.splice(i, 1);
+                        break;
+                    }
+                }
+                if(!event){return;}
+
+                event.preventDefault();//defaultの挙動をキャンセル
+                fetch('/api/toots/' + id,{
+                    credentials: 'same-origin',
+                    method: 'DELETE'
+                }).then((data) =>{
+                    //console.log(data);
+                }).catch((error) =>{
+                    console.error(error);
+                })
             }
         }
     });
@@ -44,6 +63,15 @@ domready(function(){
 
     let ws = new WebSocket("ws://localhost:3000/api/timeline");
     ws.addEventListener('message', function(event){
-        vm.toots.unshift(JSON.parse(event.data));
-    }) 
+        let message = JSON.parse(event.data);
+        switch(message.action){
+            case "create":
+                vm.toots.unshift(message.toot);
+                break;
+            case "delete":
+                vm.deleteToot(null, message.toot.id);
+                break;
+        }
+        //vm.toots.unshift(JSON.parse(event.data));
+    });
 });

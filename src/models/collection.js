@@ -24,6 +24,12 @@ class Collection{
         return assigned;
     }
 
+    order(column, direction = "asc"){
+        let assigned = this.clone();
+        assigned._order = { column: column, direction: direction};
+        return assigned;
+    }
+
     then(f){
         let sqlParts = [`SELECT * FROM ??`];
         let sqlValues = [this.klass.tableName()];
@@ -35,6 +41,15 @@ class Collection{
                 sqlValues.push(key, this._where[key]);
             })
             sqlParts.push(wheres.join(' AND '));
+        }
+        if(this._order.column){
+            sqlParts.push('ORDER BY');
+            if(this._order.direction.toLowerCase() == "asc"){
+                sqlParts.push("?? ASC");
+            } else {
+                sqlParts.push("?? DESC");
+            }
+            sqlValues.push(this._order.column);
         }
         return new Promise((resolve, reject) =>{
             db.query(sqlParts.join(' '), sqlValues).then((result) =>{
